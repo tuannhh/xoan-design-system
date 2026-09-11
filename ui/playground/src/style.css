@@ -1,0 +1,41 @@
+@import "tailwindcss";
+@source "../../components";
+@source "../../templates";
+
+/* Font InterVariable tự host (file .woff2 thật trong assets/fonts/) */
+@import "@assets/fonts/inter.css";
+
+/* Design tokens XDS */
+@import "@assets/tokens.css";
+@import "@assets/tokens/base-colors.css";
+@import "@assets/tokens/number.css";
+@import "@assets/tokens/font.css";
+@import "@assets/tokens/chart-palette.css";
+/* 11 theme chính thức (10 màu + Gradient) — đổi bằng data-xds-theme trên <html> */
+@import "@assets/tokens/themes/blue.css";
+@import "@assets/tokens/themes/indigo.css";
+@import "@assets/tokens/themes/cyan.css";
+@import "@assets/tokens/themes/teal.css";
+@import "@assets/tokens/themes/green.css";
+@import "@assets/tokens/themes/orange.css";
+@import "@assets/tokens/themes/red.css";
+@import "@assets/tokens/themes/pink.css";
+@import "@assets/tokens/themes/purple.css";
+@import "@assets/tokens/themes/blue-gray.css";
+@import "@assets/tokens/themes/gradient.css";
+
+body {
+  font-family: var(--xds-font-family);
+  font-size: var(--xds-font-size-body);
+  line-height: var(--xds-line-height-body);
+  color: var(--xds-text);
+  background: var(--xds-bg-page);
+  font-feature-settings: 'liga' 1, 'calt' 1, 'tnum' 1, 'lnum' 1;
+}
+
+/* Box trắng trên nền xám — chuẩn bắt buộc toàn team (Drop Shadow/Neutral/All 2) */
+.xds-card {
+  border-radius: var(--xds-radius-default);
+  background: var(--xds-bg);
+  box-shadow: var(--xds-shadow-card);
+}

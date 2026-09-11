@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Xoăn Design System — Chọn tone màu ứng dụng</title>
+<style>
+  :root { --text: #10141B; --text2: #6B707A; --border: #CED1D6; --bg: #F2F2F4; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', -apple-system, 'Segoe UI', sans-serif; font-size: 13px; line-height: 18px; color: var(--text); background: var(--bg); padding: 32px; }
+  h1 { font-size: 20px; line-height: 28px; margin-bottom: 4px; }
+  p.sub { color: var(--text2); margin-bottom: 24px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+  .card { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 16px; cursor: pointer; transition: box-shadow .15s, border-color .15s; }
+  .card:hover { box-shadow: 0 4px 16px rgba(0,0,0,.08); }
+  .card.selected { border: 2px solid var(--c600); padding: 15px; }
+  .card h3 { font-size: 16px; line-height: 22px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .card h3 code { font-size: 12px; color: var(--text2); font-weight: 400; }
+  .strip { display: flex; border-radius: 4px; overflow: hidden; height: 28px; margin-bottom: 12px; }
+  .strip div { flex: 1; }
+  .demo { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .btn { border: none; border-radius: 8px; padding: 7px 14px; font-family: inherit; font-size: 13px; font-weight: 500; min-width: 80px; cursor: pointer; }
+  .btn-primary { background: var(--c600); color: #fff; }
+  .btn-primary:hover { background: var(--c700); }
+  .btn-secondary { background: #fff; color: var(--text); border: 1px solid var(--border); }
+  .tag { background: var(--c100); color: var(--c700); border-radius: 4px; padding: 3px 8px; font-weight: 500; }
+  .nav { background: var(--c50); color: var(--c700); border-left: 3px solid var(--c600); padding: 6px 10px; border-radius: 0 4px 4px 0; font-weight: 500; }
+  #result { position: sticky; bottom: 16px; margin-top: 24px; background: #10141B; color: #fff; border-radius: 8px; padding: 14px 18px; display: none; }
+  #result code { background: rgba(255,255,255,.15); padding: 2px 6px; border-radius: 4px; }
+</style>
+</head>
+<body>
+<h1>Chọn tone màu ứng dụng — Xoăn Design System</h1>
+<p class="sub">10 theme chính thức của XDS. Bấm vào một thẻ để chọn; thang màu hiển thị từ bậc 50 → 900, nút/tag/nav minh họa màu thực tế khi áp dụng.</p>
+<div class="grid" id="grid"></div>
+<div id="result"></div>
+<script>
+const THEMES = {
+  "Blue (mặc định)": { key: "blue", scale: ["#F0F6FE","#DDEAFC","#C2DBFB","#99C5F7","#68A6F2","#4584EC","#245FDF","#2753CE","#2644A7","#243D84"] },
+  "Indigo":    { key: "indigo",    scale: ["#ECF4FF","#DDEBFF","#C2D9FF","#9DBEFF","#759AFF","#5576FF","#4155F5","#2A3AD8","#2534AE","#263389"] },
+  "Cyan":      { key: "cyan",      scale: ["#F0FBFF","#E0F6FE","#B9EEFE","#7CE3FD","#36D6FA","#0CC1EB","#00A2CF","#017DA3","#066986","#0B566F"] },
+  "Teal":      { key: "teal",      scale: ["#F0FDFA","#CCFBF0","#9AF5E2","#5FE9D0","#2ED3BA","#15B7A1","#0E9384","#10756B","#125D57","#134E49"] },
+  "Green":     { key: "green",     scale: ["#E6F5EF","#CDEADF","#A8D9C8","#7CC7AE","#59B89A","#2FA77A","#0E9A62","#0B7D52","#0B5A3D","#0A4A33"] },
+  "Orange":    { key: "orange",    scale: ["#FFF7ED","#FFEDD5","#FED7AA","#FDBA74","#FB923C","#F97316","#EA580C","#C2410C","#9A3412","#7C2D12"] },
+  "Red":       { key: "red",       scale: ["#FBF4F7","#F9EAF1","#F5D5E2","#EEB3C9","#E284A5","#D55F85","#C34266","#A72F4D","#8B2941","#742739"] },
+  "Pink":      { key: "pink",      scale: ["#FCF3F9","#F9EAF5","#F5D5EC","#EEB3DB","#E383C3","#D75DAA","#C64691","#A82E72","#8C285E","#752651"] },
+  "Purple":    { key: "purple",    scale: ["#F7F5FD","#EEEDFA","#E1DEF6","#CAC3EF","#ADA0E5","#9179D9","#744EC7","#6E49B8","#5C3D9A","#4D347E"] },
+  "Blue gray": { key: "blue-gray", scale: ["#FCFCFD","#F8F9FC","#EAECF5","#D5D9EB","#AFB5D9","#717BBC","#4E5BA6","#3E4784","#363F72","#293056"] },
+};
+const grid = document.getElementById("grid");
+const result = document.getElementById("result");
+for (const [name, t] of Object.entries(THEMES)) {
+  const card = document.createElement("div");
+  card.className = "card";
+  card.style.setProperty("--c50", t.scale[0]);
+  card.style.setProperty("--c100", t.scale[1]);
+  card.style.setProperty("--c600", t.scale[6]);
+  card.style.setProperty("--c700", t.scale[7]);
+  card.innerHTML = `
+    <h3>${name} <code>${t.scale[6]}</code></h3>
+    <div class="strip">${t.scale.map(c => `<div style="background:${c}" title="${c}"></div>`).join("")}</div>
+    <div class="demo">
+      <button class="btn btn-primary">Lưu</button>
+      <button class="btn btn-secondary">Hủy</button>
+      <span class="tag">Đang thực hiện</span>
+      <span class="nav">Menu đang chọn</span>
+    </div>`;
+  card.onclick = () => {
+    document.querySelectorAll(".card").forEach(c => c.classList.remove("selected"));
+    card.classList.add("selected");
+    result.style.display = "block";
+    result.innerHTML = `Đã chọn theme <b>${name}</b> — báo lại cho AI: <code>dùng theme ${t.key}</code> (import <code>assets/tokens/themes/${t.key}.css</code>, hoặc đặt <code>data-xds-theme="${t.key}"</code>)`;
+  };
+  grid.appendChild(card);
+}
+</script>
+</body>
+</html>

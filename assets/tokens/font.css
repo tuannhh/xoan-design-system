@@ -1,0 +1,11 @@
+/* XDS Font Family/Weight — sinh tự động bởi scripts/build-tokens.py, không sửa tay */
+:root {
+  --xds-font-family-display: Inter;
+  --xds-font-family-heading: Inter;
+  --xds-font-family-body: Inter;
+  --xds-font-family-caption: Inter;
+  --xds-font-weight-regular: Regular;
+  --xds-font-weight-medium: Medium;
+  --xds-font-weight-semi-bold: Semi Bold;
+  --xds-font-weight-bold: Bold;
+}
